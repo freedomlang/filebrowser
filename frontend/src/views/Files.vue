@@ -10,15 +10,8 @@
         <router-link :to="link.url">{{ link.name }}</router-link>
       </span>
     </div>
-    <div v-if="error">
-      <not-found v-if="error.message === '404'"></not-found>
-      <forbidden v-else-if="error.message === '403'"></forbidden>
-      <internal-error v-else></internal-error>
-    </div>
-    <editor v-else-if="isEditor"></editor>
-    <listing :class="{ multiple }" v-else-if="isListing"></listing>
-    <preview v-else-if="isPreview"></preview>
-    <div v-else>
+    <component :class="{ multiple }" :is="currentView" />
+    <div v-show="isloading">
       <h2 class="message">
         <span>{{ $t('files.loading') }}</span>
       </h2>
@@ -64,9 +57,6 @@ export default {
       'multiple',
       'loading'
     ]),
-    isPreview () {
-      return !this.loading && !this.isListing && !this.isEditor
-    },
     breadcrumbs () {
       let parts = this.$route.path.split('/')
 
@@ -99,6 +89,17 @@ export default {
       }
 
       return breadcrumbs
+    },
+    currentView () {
+      if (this.error && this.error.message === '404') return 'NotFound';
+      if (this.error && this.error.message === '403') return 'Forbidden';
+      if (this.error) return 'InternalError';
+
+      const isPreview = !this.loading && !this.isListing && !this.isEditor
+      if (this.isEditor) return 'Editor';
+      if (this.isListing) return 'Listing';
+      if (isPreview) return 'Preview';
+      return null;
     }
   },
   data: function () {
