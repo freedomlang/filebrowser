@@ -17,10 +17,10 @@
       </template>
 
       <template v-if="!dir">
-        <p><strong>MD5: </strong><code><a @click="checksum($event, 'md5')">{{ $t('prompts.show') }}</a></code></p>
-        <p><strong>SHA1: </strong><code><a @click="checksum($event, 'sha1')">{{ $t('prompts.show') }}</a></code></p>
-        <p><strong>SHA256: </strong><code><a @click="checksum($event, 'sha256')">{{ $t('prompts.show') }}</a></code></p>
-        <p><strong>SHA512: </strong><code><a @click="checksum($event, 'sha512')">{{ $t('prompts.show') }}</a></code></p>
+        <p><strong>MD5: </strong><code><a @click="checksum($event, 'md5')">{{ md5 || $t('prompts.show') }}</a></code></p>
+        <p><strong>SHA1: </strong><code><a @click="checksum($event, 'sha1')">{{ sha1 || $t('prompts.show') }}</a></code></p>
+        <p><strong>SHA256: </strong><code><a @click="checksum($event, 'sha256')">{{ sha256 || $t('prompts.show') }}</a></code></p>
+        <p><strong>SHA512: </strong><code><a @click="checksum($event, 'sha512')">{{ sha512 || $t('prompts.show') }}</a></code></p>
       </template>
     </div>
 
@@ -42,6 +42,14 @@ import { files as api } from '@/api'
 
 export default {
   name: 'info',
+  data () {
+    return {
+      md5: '',
+      sha1: '',
+      sha256: '',
+      sha512: '',
+    }
+  },
   computed: {
     ...mapState(['req', 'selected']),
     ...mapGetters(['selectedCount', 'isListing']),
@@ -77,6 +85,7 @@ export default {
   methods: {
     checksum: async function (event, algo) {
       event.preventDefault()
+      if (this[algo]) return;
 
       let link
 
@@ -88,8 +97,7 @@ export default {
 
       try {
         const hash = await api.checksum(link, algo)
-        // eslint-disable-next-line
-        event.target.innerHTML = hash
+        this[algo] = hash
       } catch (e) {
         this.$showError(e)
       }
