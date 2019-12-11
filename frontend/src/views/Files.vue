@@ -223,12 +223,6 @@ export default {
       }
 
       document.querySelector('#listing.list .item.header').style.top = top + 'px'
-    },
-    openSidebar () {
-      this.$store.commit('showHover', 'sidebar')
-    },
-    openSearch () {
-      this.$store.commit('showHover', 'search')
     }
   }
 }
