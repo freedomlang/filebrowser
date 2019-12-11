@@ -10,8 +10,8 @@
         <router-link :to="link.url">{{ link.name }}</router-link>
       </span>
     </div>
-    <component :class="{ multiple }" :is="currentView" />
-    <div v-show="isloading">
+    <component :is="currentView" />
+    <div v-show="loading">
       <h2 class="message">
         <span>{{ $t('files.loading') }}</span>
       </h2>
@@ -54,7 +54,6 @@ export default {
       'req',
       'user',
       'reload',
-      'multiple',
       'loading'
     ]),
     breadcrumbs () {

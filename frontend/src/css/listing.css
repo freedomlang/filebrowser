@@ -104,6 +104,10 @@
   margin: 0;
 }
 
+#listing.list.multiple {
+  padding-bottom: 4rem;
+}
+
 #listing.list .item {
   width: 100%;
   margin: 0;

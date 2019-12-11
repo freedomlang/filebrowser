@@ -7,7 +7,7 @@
     <input style="display:none" type="file" id="upload-input" @change="uploadInput($event)" multiple>
   </div>
   <div v-else id="listing"
-    :class="user.viewMode"
+    :class="[user.viewMode, multiple && 'multiple']"
     @dragenter="dragEnter"
     @dragend="dragEnd">
     <div>
@@ -76,7 +76,7 @@
 
     <input style="display:none" type="file" id="upload-input" @change="uploadInput($event)" multiple>
 
-    <div :class="{ active: $store.state.multiple }" id="multiple-selection">
+    <div :class="{ active: multiple }" id="multiple-selection">
     <p>{{ $t('files.multipleSelectionEnabled') }}</p>
       <div @click="$store.commit('multiple', false)" tabindex="0" role="button" :title="$t('files.clear')" :aria-label="$t('files.clear')" class="action">
         <i class="material-icons">clear</i>
@@ -102,7 +102,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['req', 'selected', 'user']),
+    ...mapState(['req', 'selected', 'user', 'multiple']),
     nameSorted () {
       return (this.req.sorting.by === 'name')
     },
